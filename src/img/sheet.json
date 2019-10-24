@@ -1,0 +1,36 @@
+{"frames": {
+
+"girl.png":
+{
+	"frame": {"x":0,"y":0,"w":128,"h":128},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":128,"h":128},
+	"sourceSize": {"w":128,"h":128}
+},
+"makeBig.png":
+{
+	"frame": {"x":128,"y":0,"w":96,"h":96},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":96,"h":96},
+	"sourceSize": {"w":96,"h":96}
+},
+"makeSmall.png":
+{
+	"frame": {"x":224,"y":0,"w":96,"h":96},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":96,"h":96},
+	"sourceSize": {"w":96,"h":96}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "sheet.png",
+	"format": "RGBA8888",
+	"size": {"w":320,"h":128},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:b6ff1b97799afa7a3edaa16ecb9589eb:8c8dbe33ecb8fb43a1a83fc754fc62a8:9c44ecd7e9a522007eaff2949095bc1d$"
+}
+}
