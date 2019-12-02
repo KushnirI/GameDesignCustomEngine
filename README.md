@@ -6,7 +6,7 @@ Each scene showing specific task solving. Use dropbox to select the scene.
 
 ![](/src/img/forReadme/dropBox.PNG)
 
-If any interactive actions are available on currently selected scene. You will find a hint about this in the console. 
-Otherwise, scene just showing some effect.
+If any interactive actions are available on currently selected scene you will find a hint about this in the console. 
+Otherwise, scene just shows some effect.
 
 ![](/src/img/forReadme/interactive.PNG)
