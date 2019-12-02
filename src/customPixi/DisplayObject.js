@@ -499,8 +499,80 @@ class Sprite extends DisplayObject {
     }
 }
 
+export function addStatePlayer(sprite) {
+    let frameCounter = 0,
+        numberOfFrames = 0,
+        startFrame = 0,
+        endFrame = 0,
+        timerInterval = undefined;
+    function show(frameNumber) {
+        reset();
+        sprite.gotoAndStop(frameNumber);
+    }
+    function play() {
+        playSequence([0, sprite.frames.length - 1]);
+    }
+    function stop() {
+        reset();
+        sprite.gotoAndStop(sprite.currentFrame);
+    }
+    function playSequence(sequenceArray) {
+        reset();
+        startFrame = sequenceArray[0];
+        endFrame = sequenceArray[1];
+        numberOfFrames = endFrame - startFrame;
+
+        if (startFrame === 0) {
+            numberOfFrames += 1;
+            frameCounter += 1;
+        }
+
+        if(numberOfFrames === 1){
+            numberOfFrames = 2;
+            frameCounter += 1;
+        }
+
+        if (!sprite.fps) sprite.fps = 12;
+        let frameRate = 1000 / sprite.fps;
+        sprite.gotoAndStop(startFrame);
+
+        if(!sprite.playing) {
+            timerInterval = setInterval(advanceFrame.bind(this), frameRate);
+            sprite.playing = true;
+        }
+    }
+
+    function advanceFrame() {
+        if (frameCounter < numberOfFrames) {
+            sprite.gotoAndStop(sprite.currentFrame + 1);
+            frameCounter += 1;
+        } else {
+            if (sprite.loop) {
+                sprite.gotoAndStop(startFrame);
+                frameCounter = 1;
+            }
+        }
+    }
+    function reset() {
+
+        if (timerInterval !== undefined && sprite.playing === true) {
+            sprite.playing = false;
+            frameCounter = 0;
+            startFrame = 0;
+            endFrame = 0;
+            numberOfFrames = 0;
+            clearInterval(timerInterval);
+        }
+    }
+    sprite.show = show;
+    sprite.play = play;
+    sprite.stop = stop;
+    sprite.playSequence = playSequence;
+}
+
 export function sprite(source, x, y) {
     let sprite = new Sprite(source, x, y);
+    if (sprite.frames.length > 0) addStatePlayer(sprite);
     stage.addChild(sprite);
     return sprite;
 }

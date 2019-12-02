@@ -1,3 +1,5 @@
+import {makeSound} from "./Sound";
+
 export let assets = {
     toLoad: 0,
     loaded: 0,
@@ -108,6 +110,8 @@ export let assets = {
     },
 
     loadSound(source, loadHandler){
-        console.log("loadSound called - see Chapter 10 for details");
+        let sound = makeSound(source, loadHandler);
+        sound.name = source;
+        this[sound.name] = sound;
     }
 };

@@ -20,7 +20,7 @@ export class ConstantSpeedFollowing {
 
 
         this.scene = group(this.c1, this.c2, this.message, this.connection);
-        this.visible = true;
+        this.visible = false;
     }
 
     update(){
@@ -35,7 +35,14 @@ export class ConstantSpeedFollowing {
 
         this.message.content = `Distance :${Math.floor(distanceBetweenCircles)}`;
 
-        this.scene.visible = this.visible;
+        if(this.visible){
+            if(!this.scene.visible){
+                console.info(`use mouse arrow to see constant speed following effect`)
+            }
+            this.scene.visible = true;
+        } else {
+            this.scene.visible = false;
+        }
     }
 }
 

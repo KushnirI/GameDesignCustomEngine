@@ -22,7 +22,7 @@ export class RectCollision {
         this.message = text("", "12px puzzler", "black", 8, 8);
 
         this.scene = group(this.blueBox, this.redBox, this.message);
-        this.visible = true;
+        this.visible = false;
     }
 
     update(){
@@ -34,6 +34,13 @@ export class RectCollision {
             this.message.content = "No collision..."
         }
 
-        this.scene.visible = this.visible;
+        if(this.visible){
+            if(!this.scene.visible){
+                console.info(`use mouse button to drag items and to check for collision between them`)
+            }
+            this.scene.visible = true;
+        } else {
+            this.scene.visible = false;
+        }
     }
 }
