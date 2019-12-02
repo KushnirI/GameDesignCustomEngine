@@ -257,6 +257,255 @@ export function rectangleCollision(r1, r2, bounce = false, global = true) {
 }
 
 
+export function hitTestCircleRectangle(c1, r1, global = false) {
+
+    let region, collision, c1x, c1y, r1x, r1y;
+
+    if (global) {
+        c1x = c1.gx;
+        c1y = c1.gy;
+        r1x = r1.gx;
+        r1y = r1.gy;
+    } else {
+        c1x = c1.x;
+        c1y = c1.y;
+        r1x = r1.x;
+        r1y = r1.y;
+    }
+
+    if (c1y < r1y - r1.halfHeight) {
+        if (c1x < r1x - 1 - r1.halfWidth) {
+            region = "topLeft";
+        } else if (c1x > r1x + 1 + r1.halfWidth) {
+            region = "topRight";
+        } else {
+            region = "topMiddle";
+        }
+    } else if (c1y > r1y + r1.halfHeight) {
+
+        if (c1x < r1x - 1 - r1.halfWidth) {
+            region = "bottomLeft";
+        } else if (c1x > r1x + 1 + r1.halfWidth) {
+            region = "bottomRight";
+        } else {
+            region = "bottomMiddle";
+        }
+    } else {
+        if (c1x < r1x - r1.halfWidth) {
+            region = "leftMiddle";
+        } else {
+            region = "rightMiddle";
+        }
+    }
+
+    if (region === "topMiddle" || region === "bottomMiddle" || region === "leftMiddle" || region === "rightMiddle") {
+        collision = hitTestRectangle(c1, r1, global);
+    } else {
+        let point = {};
+
+        switch (region) {
+            case "topLeft":
+                point.x = r1x;
+                point.y = r1y;
+                break;
+
+            case "topRight":
+                point.x = r1x + r1.width;
+                point.y = r1y;
+                break;
+
+            case "bottomLeft":
+                point.x = r1x;
+                point.y = r1y + r1.height;
+                break;
+
+            case "bottomRight":
+                point.x = r1x + r1.width;
+                point.y = r1y + r1.height;
+        }
+        collision = hitTestCirclePoint(c1, point, global);
+    }
+
+    if (collision) {
+        return region;
+    } else {
+        return collision;
+    }
+}
+
+export function hitTestCirclePoint(c1, point, global = false) {
+
+    point.diameter = 1;
+    point.radius = 0.5;
+    point.centerX = point.x;
+    point.centerY = point.y;
+    point.gx = point.x;
+    point.gy = point.y;
+    return hitTestCircle(c1, point, global);
+}
+
+export function circleRectangleCollision(c1, r1, bounce = false, global = false) {
+
+    let region, collision, c1x, c1y, r1x, r1y;
+
+    if (global) {
+        c1x = c1.gx;
+        c1y = c1.gy;
+        r1x = r1.gx;
+        r1y = r1.gy;
+    } else {
+        c1x = c1.x;
+        c1y = c1.y;
+        r1x = r1.x;
+        r1y = r1.y;
+    }
+
+    if (c1y < r1y - r1.halfHeight) {
+        if (c1x < r1x - 1 - r1.halfWidth) {
+            region = "topLeft";
+        } else if (c1x > r1x + 1 + r1.halfWidth) {
+            region = "topRight";
+        } else {
+            region = "topMiddle";
+        }
+    }
+
+    else if (c1y > r1y + r1.halfHeight) {
+        if (c1x < r1x - 1 - r1.halfWidth) {
+            region = "bottomLeft";
+        } else if (c1x > r1x + 1 + r1.halfWidth) {
+            region = "bottomRight";
+        } else {
+            region = "bottomMiddle";
+        }
+    } else {
+        if (c1x < r1x - r1.halfWidth) {
+            region = "leftMiddle";
+        } else {
+            region = "rightMiddle";
+        }
+    }
+
+
+    if (region === "topMiddle" || region === "bottomMiddle" || region === "leftMiddle" || region === "rightMiddle") {
+        collision = rectangleCollision(c1, r1, bounce, global);
+    } else {
+        let point = {};
+
+        switch (region) {
+            case "topLeft":
+                point.x = r1x;
+                point.y = r1y;
+                break;
+
+            case "topRight":
+                point.x = r1x + r1.width;
+                point.y = r1y;
+                break;
+
+            case "bottomLeft":
+                point.x = r1x;
+                point.y = r1y + r1.height;
+                break;
+
+            case "bottomRight":
+                point.x = r1x + r1.width;
+                point.y = r1y + r1.height;
+        }
+
+        collision = circlePointCollision(c1, point, bounce, global);
+    }
+
+    if (collision) {
+        return region;
+    } else {
+        return collision;
+    }
+}
+
+export function circlePointCollision(c1, point, bounce = false, global = false) {
+    point.diameter = 1;
+    point.radius = 0.5;
+    point.centerX = point.x;
+    point.centerY = point.y;
+    point.gx = point.x;
+    point.gy = point.y;
+    return circleCollision(c1, point, bounce, global);
+}
+
+export function hit(a, b, react = false, bounce = false, global, extra = undefined) {
+    let collision,
+        aIsASprite = a.parent !== undefined,
+        bIsASprite = b.parent !== undefined;
+
+    if (aIsASprite && b instanceof Array || bIsASprite && a instanceof Array) {
+        spriteVsArray();
+    } else {
+        collision = findCollisionType(a, b);
+        if (collision && extra) extra(collision);
+    }
+
+    return collision;
+
+    function findCollisionType(a, b) {
+        let aIsASprite = a.parent !== undefined;
+        let bIsASprite = b.parent !== undefined;
+
+        if (aIsASprite && bIsASprite) {
+            if (a.diameter && b.diameter) {
+                return circleVsCircle(a, b);
+            } else if (a.diameter && !b.diameter) {
+                return circleVsRectangle(a, b);
+            } else {
+                return rectangleVsRectangle(a, b);
+            }
+        } else if (bIsASprite && !(a.x === undefined) && !(a.y === undefined)) {
+            return hitTestPoint(a, b);
+        } else {
+            throw new Error(`I'm sorry, ${a} and ${b} cannot be use together in a collision test.'`);
+        }
+    }
+
+    function spriteVsArray() {
+        if (a instanceof Array) {
+            let [a, b] = [b, a];
+        }
+
+        for (let i = b.length - 1; i >= 0; i--) {
+            let sprite = b[i];
+            collision = findCollisionType(a, sprite);
+            if (collision && extra) extra(collision, sprite);
+        }
+    }
+
+    function circleVsCircle(a, b) {
+        if (!react) {
+            return hitTestCircle(a, b);
+        } else {
+            if (a.vx + a.vy !== 0 && b.vx + b.vy !== 0) {
+                return movingCircleCollision(a, b, global);
+            } else {
+                return circleCollision(a, b, bounce, global);
+            }
+        }
+    }
+
+    function rectangleVsRectangle(a, b) {
+        if (!react) {
+            return hitTestRectangle(a, b, global);
+        } else {
+            return rectangleCollision(a, b, bounce, global);
+        }
+    }
+
+    function circleVsRectangle(a, b) {
+        if (!react) {
+            return hitTestCircleRectangle(a, b, global);
+        } else {
+            return circleRectangleCollision(a, b, bounce, global);
+        }
+    }
+}
 
 function bounceOffSurface(o, s) {
     let dp1, dp2,

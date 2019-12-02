@@ -14,9 +14,7 @@ export class TreasureHunter {
         this.gameOverScene = this.createGameOverScene(stage);
 
         this.scene = group(this.gameScene, this.gameOverScene);
-
         this.visible = true;
-
         this.addPlayerMovement();
 
     }
@@ -149,7 +147,6 @@ export class TreasureHunter {
                 enemy.vy *= -1;
             }
 
-
             if(hitTestRectangle(this.player, enemy)) {
                 this.playerHit = true;
             }
@@ -183,8 +180,13 @@ export class TreasureHunter {
         this.player.x += this.player.vx;
         this.player.y += this.player.vy;
 
-        this.scene.visible = this.visible;
-
+        if(this.visible){
+            if(!this.scene.visible){
+                console.info(`use keyboard arrows to move, drag treasure to the exit, avoid touching enemies`)
+            }
+            this.scene.visible = true;
+        } else {
+            this.scene.visible = false;
+        }
     }
-
 }

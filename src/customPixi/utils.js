@@ -1,4 +1,14 @@
 import {group} from "./Group";
+import {sprite} from "./DisplayObject";
+import {rectangle} from "./Rectangle";
+
+export function wait(duration = 0) {
+    let timer = resolve => {
+        setTimeout(resolve, duration);
+    };
+    let promise = new Promise(timer);
+    return promise;
+}
 
 export function frame(source, x, y, width, height) {
     let obj = {};
@@ -493,5 +503,97 @@ export function grid(
 
     createGrid();
 
+    return container;
+}
+
+export function tilingSprite(width, height, source, x = 0, y = 0) {
+
+    let tileWidth, tileHeight;
+
+    if(source.frame) {
+        tileWidth = source.frame.w;
+        tileHeight = source.frame.h;
+    } else {
+        tileWidth = source.width;
+        tileHeight = source.height;
+    }
+
+    let columns, rows;
+
+    if (width >= tileWidth) {
+        columns = Math.round(width / tileWidth) + 1;
+    } else {
+        columns = 2;
+    }
+
+    if (height >= tileHeight) {
+        rows = Math.round(height / tileHeight) + 1;
+    } else {
+        rows = 2;
+    }
+
+
+    let tileGrid = grid(
+        columns, rows, tileWidth, tileHeight, false, 0, 0,
+        () => {
+
+            let tile = sprite(source);
+            return tile;
+        }
+    );
+
+    tileGrid._tileX = 0;
+    tileGrid._tileY = 0;
+
+    let container = rectangle(width, height, "none", "none");
+    container.x = x;
+    container.y = y;
+
+    container.mask = true;
+    container.addChild(tileGrid);
+
+    Object.defineProperties(container, {
+        tileX: {
+            get() {
+                return tileGrid._tileX;
+            },
+            set(value) {
+
+                tileGrid.children.forEach(child => {
+
+                    let difference = value - tileGrid._tileX;
+
+                    child.x += difference;
+
+                    if (child.x > (columns - 1) * tileWidth) {
+                        child.x = 0 - tileWidth + difference;
+                    }
+
+                    if (child.x < 0 - tileWidth - difference) {
+                        child.x = (columns - 1) * tileWidth;
+                    }
+                });
+
+                tileGrid._tileX = value;
+            },
+            enumerable: true, configurable: true
+        },
+        tileY: {
+            get() {
+                return tileGrid._tileY;
+            },
+
+            set(value) {
+                tileGrid.children.forEach(child => {
+                    let difference = value - tileGrid._tileY;
+                    child.y += difference;
+                    if (child.y > (rows - 1) * tileHeight) child.y = 0 - tileHeight + difference;
+                    if (child.y < 0 - tileHeight - difference) child.y = (rows - 1) * tileHeight;
+                });
+                tileGrid._tileY = value;
+            },
+            enumerable: true, configurable: true
+        }
+    });
     return container;
 }

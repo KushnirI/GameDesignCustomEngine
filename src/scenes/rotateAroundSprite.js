@@ -22,5 +22,4 @@ export class RotateAroundSprite {
 
         this.scene.visible = this.visible;
     }
-
 }

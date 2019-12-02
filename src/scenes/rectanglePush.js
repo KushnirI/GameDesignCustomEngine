@@ -22,7 +22,7 @@ export class  RectanglePush{
         this.message = text("", "12px puzzler", "black", 8, 8);
 
         this.scene = group(this.blueBox, this.redBox, this.message);
-        this.visible = true;
+        this.visible = false;
     }
 
     update(){
@@ -35,6 +35,13 @@ export class  RectanglePush{
             this.message.content = "No collision..."
         }
 
-        this.scene.visible = this.visible;
+        if(this.visible){
+            if(!this.scene.visible){
+                console.info(`use mouse to drag the red box and push the blue one`)
+            }
+            this.scene.visible = true;
+        } else {
+            this.scene.visible = false;
+        }
     }
 }

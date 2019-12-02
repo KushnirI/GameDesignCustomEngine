@@ -20,12 +20,20 @@ export class DragAndDrop {
 
         this.addDraggable(this.captain, this.hulk, this.ironMan);
         this.scene = group(this.captain, this.hulk, this.ironMan);
-        this.visible = true;
+        this.visible = false;
     }
 
     update(){
         this.pointer.updateDragAndDrop(draggableSprites);
-        this.scene.visible = this.visible;
+
+        if(this.visible){
+            if(!this.scene.visible){
+                console.info(`use mouse button to drag items`)
+            }
+            this.scene.visible = true;
+        } else {
+            this.scene.visible = false;
+        }
     }
 
     addDraggable(...sprites) {

@@ -15,7 +15,7 @@ export class Tank {
         this.message = text("Shoot the wall", "16px puzzler", "black", 12, 12);
         this.angleMessage = text("", "16px puzzler", "black", 12, 36);
         this.scene = group(this.tank, this.message, this.angleMessage, this.bullets);
-        this.visible = true;
+        this.visible = false;
     }
 
     update(){
@@ -54,7 +54,14 @@ export class Tank {
 
         this.angleMessage.content = `Angle: ${Math.floor(this.tank.rotation * 10)/10}`;
 
-        this.scene.visible = this.visible;
+        if(this.visible){
+            if(!this.scene.visible){
+                console.info(`use keyboard arrows to move and "space" to shoot`)
+            }
+            this.scene.visible = true;
+        } else {
+            this.scene.visible = false;
+        }
     }
 
     createTank () {

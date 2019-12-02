@@ -39,7 +39,7 @@ export class MovingAndStatCircles {
         this.capturedMarble = null;
 
         this.scene = group(this.pegs, this.sling, this.ball);
-        this.visible = true;
+        this.visible = false;
     }
 
     update(){
@@ -92,6 +92,13 @@ export class MovingAndStatCircles {
             circleCollision(this.ball, peg, true, true)
         });
 
-        this.scene.visible = this.visible;
+        if(this.visible){
+            if(!this.scene.visible){
+                console.info(`push on the red circle then move mouse aside and release, to make it move`)
+            }
+            this.scene.visible = true;
+        } else {
+            this.scene.visible = false;
+        }
     }
 }

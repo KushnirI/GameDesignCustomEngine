@@ -19,7 +19,7 @@ export class InteractiveSprite {
         };
 
         this.scene = group(this.ball);
-        this.visible = true;
+        this.visible = false;
     }
 
     update(){
@@ -30,7 +30,14 @@ export class InteractiveSprite {
                 canvas.style.cursor = "pointer";
             }
         }
-        this.scene.visible = this.visible;
-    }
 
+        if(this.visible){
+            if(!this.scene.visible){
+                console.info(`hit the circle to change it`)
+            }
+            this.scene.visible = true;
+        } else {
+            this.scene.visible = false;
+        }
+    }
 }

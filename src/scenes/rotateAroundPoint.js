@@ -25,5 +25,4 @@ export class RotateAroundPoint {
 
         this.scene.visible = this.visible;
     }
-
 }

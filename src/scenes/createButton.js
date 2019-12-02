@@ -29,7 +29,7 @@ export class CreateButton {
         this.actionMessage = text("", "18px puzzler", "black", 18, 36);
 
         this.scene = group(this.playButton, this.stateMessage, this.actionMessage);
-        this.visible = true;
+        this.visible = false;
     }
 
     update(){
@@ -50,7 +50,13 @@ export class CreateButton {
         this.stateMessage.content = `State: ${this.playButton.state}`;
         this.actionMessage.content = `Action: ${this.playButton.action}`;
 
-        this.scene.visible = this.visible;
+        if(this.visible){
+            if(!this.scene.visible){
+                console.info(`press and release the button`)
+            }
+            this.scene.visible = true;
+        } else {
+            this.scene.visible = false;
+        }
     }
-
 }

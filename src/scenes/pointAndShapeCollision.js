@@ -20,7 +20,7 @@ export class PointAndShapeCollision {
         this.message = text("", "12px puzzler", "black", 8, 8);
 
         this.scene = group(this.box, this.ball, this.message);
-        this.visible = true;
+        this.visible = false;
     }
 
     update(){
@@ -34,6 +34,13 @@ export class PointAndShapeCollision {
             this.message.content = "No collision..."
         }
 
-        this.scene.visible = this.visible;
+        if(this.visible){
+            if(!this.scene.visible){
+                console.info(`use mouse arrow to check for collision between mouse and item`)
+            }
+            this.scene.visible = true;
+        } else {
+            this.scene.visible = false;
+        }
     }
 }

@@ -2,7 +2,6 @@ import {group} from "../customPixi/Group";
 import {canvas} from "../index";
 import {circle} from "../customPixi/Circle";
 
-
 export class AccelerationAndFrictionBall {
     constructor() {
 
@@ -54,5 +53,4 @@ export class AccelerationAndFrictionBall {
 
         this.scene.visible = this.visible;
     }
-
 }
